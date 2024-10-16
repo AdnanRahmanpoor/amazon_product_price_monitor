@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <title>Amazon Product Price Monitor</title>
+</head>
+<body>
+    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid justify-content-center">
+          <span class="navbar-brand mb-0 h1">Price Monitoring Dashboard</span>
+        </div>
+    </nav>
+    <div class="container-fluid w-75 align-items-center">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <section class="d-block mx-auto">
+            <h2>Add a Product to Monitor</h2>
+            <form action="/" method="POST">
+                <label for="product-url" class="form-label">Product URL:</label>
+                <input type="url" class="form-control w-50"  id="product-url" name="product-url" required>
+                <button type="submit" class="btn btn-primary mt-3 w-50">Scrape Product</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Products List</h2>
+            <table border="1" class="table table-striped">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Availability</th>
+                    <th>Link</th>
+                </tr>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.availability }}</td>
+                    <td><a href="{{ product.link }}" target="_blank">View Product</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>Price Trend Chart</h2>
+            <img src="{{ url_for('static', filename='price_chart.png') }}" alt="Price Trend Chart">
+        </section>  
+    </div>
+</body>
+</html>
